@@ -1,27 +1,65 @@
 extern crate term_size;
-//extern crate num;
-//use num::Integer;
+//use ansi_term::Style;
+use std::io::{stdout, Write};
+//use std::time;
+use std::thread;
+use termion::{color, cursor, clear, style};
+
+
+
+
+
+// The debug version
+#[cfg(feature = "debug")]
+macro_rules! debug_println {
+    ($( $args:expr ),*) => { println!( $( $args ),* ); }
+}
+
+// Non-debug version
+#[cfg(not(feature = "debug"))]
+macro_rules! debug_println {
+    ($( $args:expr ),*) => {}
+}
+
 
 fn main() {
+for x in 0..10 {
     if let Some((w, h)) = term_size::dimensions() {
+        
         if w % 2 == 0 {
-            println!("even")
-            
+            debug_println!("even");
         } else {
-            println!("odd")
+            debug_println!("odd");
         }
         if h % 2 == 0 {
-            println!("even");
+            debug_println!("even");
             let hight = (h-4) / 2;
-            println!("{} {}", h-4, hight);
+            debug_println!("{} {}", h-4, hight);
         } else {
-            println!("odd")
+            debug_println!("odd");
+            let hight = (h-4) / 2;
+            debug_println!("{} {}", h-4, hight);
         }
+        feedback();
     } else {
         println!("Unable to get term size :(")
     }
-}
 
+
+fn feedback() {
+   println!("{goto}{underline} TEST ",
+   goto = cursor::Goto(5, 15),
+   underline = style::Underline);
+
+
+}
+   
+  thread::sleep_ms(2000);
+  println!("{clear}",
+  clear = clear::All);
+  
+ }
+}
 /*
 fn even_or_odd() {
   let number = w;
@@ -41,3 +79,4 @@ fn fool(var:bool) {
   }
 }
 */
+
