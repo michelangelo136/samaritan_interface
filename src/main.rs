@@ -1,3 +1,4 @@
+
 extern crate term_size;
 //use ansi_term::Style;
 use std::io::{stdout, Write};
@@ -26,31 +27,24 @@ fn main() {
 for x in 0..10 {
     if let Some((w, h)) = term_size::dimensions() {
         
-        if w % 2 == 0 {
-            debug_println!("even");
-        } else {
-            debug_println!("odd");
-        }
-        if h % 2 == 0 {
-            debug_println!("even");
-            let hight = (h-4) / 2;
-            debug_println!("{} {}", h-4, hight);
-        } else {
-            debug_println!("odd");
-            let hight = (h-4) / 2;
-            debug_println!("{} {}", h-4, hight);
-        }
-        feedback();
-    } else {
-        println!("Unable to get term size :(")
+    let mut hight = h / 2;
+    let mut weight = w / 2;
+    feedback(weight, hight);
     }
 
 
-fn feedback() {
-   println!("{goto}{underline} TEST ",
-   goto = cursor::Goto(5, 15),
-   underline = style::Underline);
+fn feedback(x: usize, y: usize) {
+   x as i32;
+   y as i32;
+   let  x1: u16 = x as u16;
+   let  y1: u16 = y as u16;
 
+   println!("{goto}{underline} {input_x} {input_y} ",
+   goto = cursor::Goto(x1, y1),
+   underline = style::Underline,
+   input_x = x,
+   input_y = y);
+   println!("{} {}", x, y);
 
 }
    
@@ -60,23 +54,3 @@ fn feedback() {
   
  }
 }
-/*
-fn even_or_odd() {
-  let number = w;
-  if number % 2 == 0 {
-      println!("{} its even.", w);
-  } else {
-      println!("{} its odd.", w);
-  }
-
-}
-
-fn fool(var:bool) {
-  if var {
-     println!("1");
-  } else if !var {
-     println! ("0");
-  }
-}
-*/
-
