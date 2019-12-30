@@ -42,15 +42,22 @@ fn feedback(x: usize, y: usize) { // Gets cordinents (x, y) and sets the censor
    let  x1: u16 = x as u16;
    let  y1: u16 = y as u16;
 
-   println!("{goto}{underline} {input_x} {input_y} ",
+   println!("{goto}{underline} {input_x} {input_y} {reset_style}",
    goto = cursor::Goto(x1, y1),
    underline = style::Underline,
+   reset_style = style::Reset,
    input_x = x,
    input_y = y);
+   println!("{goto}{red}^{reset_color}",
+   red = color::Fg(color::Red),
+   goto = cursor::Goto(x1, y1 + 1),
+   reset_color = color::Fg(color::Reset));
    debug_println!("{} {}", x, y);
 
 }
-   
+  /* println!("{goto}{red}^",
+  red = color::Fg(color::Red),
+  goto = cursor::Goto(x1, y1 - 1)); */
   thread::sleep_ms(2000);
   println!("{clear}",
   clear = clear::All);
