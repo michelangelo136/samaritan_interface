@@ -1,0 +1,18 @@
+[package]
+name = "samaritan_interface"
+version = "0.1.0"
+authors = ["admin"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+termion = "1.5.4"
+crossterm = "0.14.1"
+term_size = "0.3.1"
+num = "0.2.0"
+ansi_term = "0.12"
+same+file = ""
+
+[features]
+debug = []
