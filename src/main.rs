@@ -7,7 +7,6 @@ use std::thread;
 use termion::{color, cursor, clear, style};
 use std::io::prelude::*;
 use std::fs::File;
-use std::io::prelude::*;
 
 
 
@@ -33,24 +32,29 @@ fn main() {
      if let Some((w, h)) = term_size::dimensions() {    // Gets terminal dimensions
          
      let hight = h / 2;                               // Sets hight and sends it to debug_size
-     let weight = w / 2;                             // set weght and sends it to debug_size
+     let weight = w / 2;                             // Set weght and sends it to debug_size
      //debug_size(weight, hight);                   // Prints dimensions
-     //stand_by(weight, hight);                    // Sends parameters to stand_by
+     //calculation_re(weight, hight);              // Sends dimensions to calculating_re
      //awaiting(weight, hight);
 
-     let mut file = File::open("input/input.txt").expect("Unable to open th file"); // Gets input from input_file and converts it to string
+     let mut file = File::open("input/input_file").expect("Unable to open the file"); // Gets input from input_file and converts it to string
      let mut contents = String::new();
      file.read_to_string(&mut contents).expect("Unable to read the file");
      
      if contents == " " {                     // Checks if the file has commands in it, then start a task
-       awaiting(weight, hight);
+       stand_by(weight, hight);
+       //write();
+       //awaiting(weight, hight);
      } else {
        input(weight, hight, &contents);
+       //stand_by(weight, hight);
      }
      
     
     }
 
+
+// *************************************************************
 
 fn debug_size(x: usize, y: usize) { // Gets cordinents (x, y) and sets the censor
    x as i32;
@@ -71,17 +75,14 @@ fn debug_size(x: usize, y: usize) { // Gets cordinents (x, y) and sets the censo
    debug_println!("{} {}", x, y);
 
 }
-  /* println!("{goto}{red}^",
-  red = color::Fg(color::Red),
-  goto = cursor::Goto(x1, y1 - 1)); */
   std::thread::sleep_ms(2000);
-  //println!("{clear}",
-  //clear = clear::All);
   
  }
 
 
-fn stand_by(x: usize, y: usize) { // Set's stand_by ststus
+// *************************************************************
+
+fn calculation_re(x: usize, y: usize) { // Set's stand_by ststus
    //x as i32;
    //y as i32;
    let x1: u16 = x as u16;
@@ -98,41 +99,50 @@ fn stand_by(x: usize, y: usize) { // Set's stand_by ststus
 
 }
 
+
+// *************************************************************
+
 fn input(x: usize, y: usize, contents: &str) { // Prints the input
    let x1: u16 = x as u16;
    let y1: u16 = y as u16;
    //let input1 = "test";
-   for splited_input in contents.split_whitespace() {
-   thread::sleep_ms(1250);
-   println!("{clear}",
-   clear = clear::All);
+    for splited_input in contents.split_whitespace() {
+       thread::sleep_ms(1250);
+       println!("{clear}",
+       clear = clear::All);
    
-   //let actuall_lenght = contents.len();
-   //let half_lenght = (actuall_lenght - 1) / 2;
-   //let half_lenght_u16: u16 = half_lenght as u16;
+       //let actuall_lenght = contents.len();
+       //let half_lenght = (actuall_lenght - 1) / 2;
+       //let half_lenght_u16: u16 = half_lenght as u16;
    
-   let actuall_lenght = splited_input.len();
-   let half_lenght = (actuall_lenght - 1) / 2;
-   let half_lenght_u16: u16 = half_lenght as u16;
+       let actuall_lenght = splited_input.len();
+       let half_lenght = (actuall_lenght - 1) / 2;
+       let half_lenght_u16: u16 = half_lenght as u16;
    
 
-   println!("{goto_1}{underline}{input_0}{reset_style}{goto_2}{red}^{reset_color}",
-   goto_1 = cursor::Goto(x1 - half_lenght_u16, y1),
-   underline = style::Underline,
-   reset_style = style::Reset,
-   reset_color = color::Fg(color::Reset),
-   red = color::Fg(color::Red),
-   goto_2 = cursor::Goto(x1, y1 + 1),
-   input_0 = splited_input/*.to_owned() + " "*/);
-   //input_1 = actuall_lenght -1 );
-   debug_println!("**Debug: Actuall lenght {}",
-   actuall_lenght - 1);
-   
-  }
-file_input.write_all(" "); 
+       println!("{goto_1}{underline}{input_0}{reset_style}{goto_2}{red}^{reset_color}",
+       goto_1 = cursor::Goto(x1 - half_lenght_u16, y1),
+       underline = style::Underline,
+       reset_style = style::Reset,
+       reset_color = color::Fg(color::Reset),
+       red = color::Fg(color::Red),
+       goto_2 = cursor::Goto(x1, y1 + 1),
+       input_0 = splited_input/*.to_owned() + " "*/);
+       //input_1 = actuall_lenght -1 );
+       debug_println!("**debug: input fn");
+       debug_println!("**debug: Actuall lenght {}",
+       actuall_lenght);
+    
+    }
+  thread::sleep_ms(1500);
+  clear_file();
+  //stand_by(x, y);
 }
 
-fn awaiting (x: usize, y: usize) { // Set's stand_by ststus
+
+// *************************************************************
+
+fn awaiting (x: usize, y: usize) { // Set's stand_by status
    //x as i32;
    //y as i32;
    let x1: u16 = x as u16;
@@ -146,8 +156,41 @@ fn awaiting (x: usize, y: usize) { // Set's stand_by ststus
    red = color::Fg(color::Red),
    goto_2 = cursor::Goto(x1, y1 + 1));
 
-
 }
+
+
+// *************************************************************
+
+fn clear_file() {
+   let mut buffer = File::create("input/input_file");
+   //buffer.write_all(b"test");
+   debug_println!("**debug: clear_file fn");
+   
+}
+
+
+// *************************************************************
+
+fn stand_by(x: usize, y: usize) {
+   let x1: u16 = x as u16;
+   let y1: u16 = y as u16;
+   
+   println!("{clear}",
+   clear = clear::All);
+   println!("{goto_1}{underline}{input_0}{reset_style}{goto_2}{red}^{reset_color}",
+   goto_1 = cursor::Goto(x1 - 1, y1),
+   underline = style::Underline,
+   reset_style = style::Reset,
+   reset_color = color::Fg(color::Reset),
+   red = color::Fg(color::Red),
+   goto_2 = cursor::Goto(x1, y1 + 1),
+   input_0 = "   ");
+   debug_println!("**debug: stand_by fn");     
+}
+
+
+// *************************************************************
+
 
 
 
