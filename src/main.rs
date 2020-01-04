@@ -26,8 +26,9 @@ macro_rules! debug_println {
 fn main() {
    println!("{}",
    clear = clear::All);                                    // Clears screen
-   
+}   
 
+fn looper() {
  for _t in 0..10 {                                       // Loops for 10 times
      if let Some((w, h)) = term_size::dimensions() {    // Gets terminal dimensions
          
@@ -41,7 +42,7 @@ fn main() {
      let mut contents = String::new();
      file.read_to_string(&mut contents).expect("Unable to read the file");
      
-     if contents == " " {                     // Checks if the file has commands in it, then start a task
+     if &contents.trim() == &" " {                     // Checks if the file has commands in it, then start a task
        stand_by(weight, hight);
        //write();
        //awaiting(weight, hight);
@@ -75,7 +76,7 @@ fn debug_size(x: usize, y: usize) { // Gets cordinents (x, y) and sets the censo
    debug_println!("{} {}", x, y);
 
 }
-  std::thread::sleep_ms(2000);
+  //std::thread::sleep_ms(2000);
   
  }
 
@@ -135,7 +136,7 @@ fn input(x: usize, y: usize, contents: &str) { // Prints the input
     
     }
   thread::sleep_ms(1500);
-  clear_file();
+  clear_file(x, y);
   //stand_by(x, y);
 }
 
@@ -161,10 +162,11 @@ fn awaiting (x: usize, y: usize) { // Set's stand_by status
 
 // *************************************************************
 
-fn clear_file() {
-   let mut buffer = File::create("input/input_file");
+fn clear_file(x: usize, y: usize) {
+   let buffer = File::create("input/input_file");
    //buffer.write_all(b"test");
    debug_println!("**debug: clear_file fn");
+   stand_by(x, y);
    
 }
 
@@ -177,6 +179,18 @@ fn stand_by(x: usize, y: usize) {
    
    println!("{clear}",
    clear = clear::All);
+   
+   println!("{goto_1}{underline}{input_0}{reset_style}",
+   goto_1 = cursor::Goto(x1 - 1, y1),
+   underline = style::Underline,
+   reset_style = style::Reset,
+   input_0 = "   ");
+   debug_println!("**debug: stand_by fn");
+
+   thread::sleep_ms(350);
+   println!("{clear}",
+   clear = clear::All);
+
    println!("{goto_1}{underline}{input_0}{reset_style}{goto_2}{red}^{reset_color}",
    goto_1 = cursor::Goto(x1 - 1, y1),
    underline = style::Underline,
@@ -185,7 +199,9 @@ fn stand_by(x: usize, y: usize) {
    red = color::Fg(color::Red),
    goto_2 = cursor::Goto(x1, y1 + 1),
    input_0 = "   ");
-   debug_println!("**debug: stand_by fn");     
+   debug_println!("**debug: stand_by fn");
+   thread::sleep_ms(350);
+   main();     
 }
 
 
