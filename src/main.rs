@@ -7,7 +7,7 @@ use std::thread;
 use termion::{color, cursor, clear, style};
 use std::io::prelude::*;
 use std::fs::File;
-
+//use crossterm::cursor;
 
 
 // The debug version
@@ -26,7 +26,8 @@ macro_rules! debug_println {
 fn main() {
    println!("{}",
    clear = clear::All);                                    // Clears screen
-}   
+   looper();   
+   
 
 fn looper() {
  for _t in 0..10 {                                       // Loops for 10 times
@@ -42,7 +43,7 @@ fn looper() {
      let mut contents = String::new();
      file.read_to_string(&mut contents).expect("Unable to read the file");
      
-     if &contents.trim() == &" " {                     // Checks if the file has commands in it, then start a task
+     if &contents.trim() == &"" {                     // Checks if the file has commands in it, then start a task
        stand_by(weight, hight);
        //write();
        //awaiting(weight, hight);
@@ -51,10 +52,10 @@ fn looper() {
        //stand_by(weight, hight);
      }
      
-    
     }
+  }
 
-
+}
 // *************************************************************
 
 fn debug_size(x: usize, y: usize) { // Gets cordinents (x, y) and sets the censor
@@ -78,7 +79,7 @@ fn debug_size(x: usize, y: usize) { // Gets cordinents (x, y) and sets the censo
 }
   //std::thread::sleep_ms(2000);
   
- }
+ 
 
 
 // *************************************************************
@@ -187,7 +188,7 @@ fn stand_by(x: usize, y: usize) {
    input_0 = "   ");
    debug_println!("**debug: stand_by fn");
 
-   thread::sleep_ms(350);
+   thread::sleep_ms(750);
    println!("{clear}",
    clear = clear::All);
 
@@ -200,8 +201,8 @@ fn stand_by(x: usize, y: usize) {
    goto_2 = cursor::Goto(x1, y1 + 1),
    input_0 = "   ");
    debug_println!("**debug: stand_by fn");
-   thread::sleep_ms(350);
-   main();     
+   thread::sleep_ms(750);
+   looper();     
 }
 
 
