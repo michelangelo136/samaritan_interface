@@ -25,7 +25,7 @@ macro_rules! debug_println {
 
 fn main() {
    println!("{}",
-   clear = clear::All);                                      // Clears screen
+   clear = clear::All);                                    // Clears screen
    looper();   
    
 
@@ -34,12 +34,12 @@ fn looper() {
      if let Some((w, h)) = term_size::dimensions() {    // Gets terminal dimensions
          
      let hight = h / 2;                               // Sets hight and sends it to debug_size
-     let weight = (w / 2) + 2;                       // Set weght and sends it to debug_size
+     let weight = w / 2;                             // Set weght and sends it to debug_size
      //debug_size(weight, hight);                   // Prints dimensions
      //calculation_re(weight, hight);              // Sends dimensions to calculating_re
      //awaiting(weight, hight);
 
-     let mut file = File::open("input/display_file").expect("Unable to open the file"); // Gets input from input_file and converts it to string
+     let mut file = File::open("input/input_file").expect("Unable to open the file"); // Gets input from input_file and converts it to string
      let mut contents = String::new();
      file.read_to_string(&mut contents).expect("Unable to read the file");
      
@@ -122,15 +122,14 @@ fn input(x: usize, y: usize, contents: &str) { // Prints the input
        let half_lenght_u16: u16 = half_lenght as u16;
    
 
-       println!("{goto_1}{underline}{input_0}{reset_style}{goto_2}{red}^{reset_color}{goto_3}",
+       println!("{goto_1}{underline}{input_0}{reset_style}{goto_2}{red}^{reset_color}",
        goto_1 = cursor::Goto(x1 - half_lenght_u16, y1),
        underline = style::Underline,
        reset_style = style::Reset,
        reset_color = color::Fg(color::Reset),
        red = color::Fg(color::Red),
        goto_2 = cursor::Goto(x1, y1 + 1),
-       input_0 = splited_input/*.to_owned() + " "*/,
-       goto_3 = cursor::Goto(x1, y1 * 2));
+       input_0 = splited_input/*.to_owned() + " "*/);
        //input_1 = actuall_lenght -1 );
        debug_println!("**debug: input fn");
        debug_println!("**debug: Actuall lenght {}",
@@ -165,7 +164,7 @@ fn awaiting (x: usize, y: usize) { // Set's stand_by status
 // *************************************************************
 
 fn clear_file(x: usize, y: usize) {
-   let buffer = File::create("input/display_file");
+   let buffer = File::create("input/input_file");
    //buffer.write_all(b"test");
    debug_println!("**debug: clear_file fn");
    stand_by(x, y);
@@ -182,11 +181,10 @@ fn stand_by(x: usize, y: usize) {
    println!("{clear}",
    clear = clear::All);
    
-   println!("{goto_1}{underline}{input_0}{reset_style}{goto_2}",
+   println!("{goto_1}{underline}{input_0}{reset_style}",
    goto_1 = cursor::Goto(x1 - 1, y1),
    underline = style::Underline,
    reset_style = style::Reset,
-   goto_2 = cursor::Goto(x1, y1 * 2),
    input_0 = "   ");
    debug_println!("**debug: stand_by fn");
 
@@ -194,17 +192,16 @@ fn stand_by(x: usize, y: usize) {
    println!("{clear}",
    clear = clear::All);
 
-   println!("{goto_1}{underline}{input_0}{reset_style}{goto_2}{red}^{reset_color}{goto_3}",
+   println!("{goto_1}{underline}{input_0}{reset_style}{goto_2}{red}^{reset_color}",
    goto_1 = cursor::Goto(x1 - 1, y1),
    underline = style::Underline,
    reset_style = style::Reset,
    reset_color = color::Fg(color::Reset),
    red = color::Fg(color::Red),
    goto_2 = cursor::Goto(x1, y1 + 1),
-   goto_3 = cursor::Goto(x1, y1 * 2),
    input_0 = "   ");
    debug_println!("**debug: stand_by fn");
-   thread::sleep_ms(750);
+   thread::sleep_ms(70);
    looper();     
 }
 
