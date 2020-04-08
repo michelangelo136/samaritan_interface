@@ -33,8 +33,8 @@ fn looper() {
  for _t in 0..10 {                                       // Loops for 10 times
      if let Some((w, h)) = term_size::dimensions() {    // Gets terminal dimensions
          
-     let hight = h / 2;                               // Sets hight and sends it to debug_size
-     let weight = (w / 2) + 2;                       // Set weght and sends it to debug_size
+     let hight = (h / 2) + 2 ;                        // Sets hight
+     let weight = (w / 2) + 2;                       // Set weight 
      //debug_size(weight, hight);                   // Prints dimensions
      //calculation_re(weight, hight);              // Sends dimensions to calculating_re
      //awaiting(weight, hight);
@@ -42,14 +42,24 @@ fn looper() {
      let mut file = File::open("input/display_file").expect("Unable to open the file"); // Gets input from input_file and converts it to string
      let mut contents = String::new();
      file.read_to_string(&mut contents).expect("Unable to read the file");
-     
-     if &contents.trim() == &"" {                     // Checks if the file has commands in it, then start a task
-       stand_by(weight, hight);
-       //write();
-       //awaiting(weight, hight);
-     } else {
-       input(weight, hight, &contents);
-       //stand_by(weight, hight);
+     let mut loops: u32 = 1;     
+
+   debug_println!("loops = {}", loops);
+
+
+     if &contents.trim() == &"" {		// Checks if the file has commands in it, then start a task
+       	if loops < 4 {
+	  loops = loops + 1;
+          stand_by(weight, hight);		// Goes to stand_by mode
+          //write();
+ 	  debug_println!("loops = {}", loops);
+	} else {
+	   awaiting(weight, hight);
+	   loops = 0;
+	}
+     } 	else {
+         input(weight, hight, &contents);	// If file has inpute, sends it to be displayed
+         //stand_by(weight, hight);
      }
      
     }
@@ -58,7 +68,7 @@ fn looper() {
 }
 // *************************************************************
 
-fn debug_size(x: usize, y: usize) { // Gets cordinents (x, y) and sets the censor
+fn debug_size(x: usize, y: usize) { // Gets cordinents (x, y) and sets the censor, used only for de_buging the screen resolution
    x as i32;
    y as i32;
    let  x1: u16 = x as u16;
@@ -84,7 +94,7 @@ fn debug_size(x: usize, y: usize) { // Gets cordinents (x, y) and sets the censo
 
 // *************************************************************
 
-fn calculation_re(x: usize, y: usize) { // Set's stand_by ststus
+fn calculation_re(x: usize, y: usize) { // Set's stand_by status
    //x as i32;
    //y as i32;
    let x1: u16 = x as u16;
@@ -108,7 +118,7 @@ fn input(x: usize, y: usize, contents: &str) { // Prints the input
    let x1: u16 = x as u16;
    let y1: u16 = y as u16;
    //let input1 = "test";
-    for splited_input in contents.split_whitespace() {
+    for splited_input in contents.split_whitespace() {		// Loop as many times as words exists in splited_input
        thread::sleep_ms(1250);
        println!("{clear}",
        clear = clear::All);
@@ -117,9 +127,9 @@ fn input(x: usize, y: usize, contents: &str) { // Prints the input
        //let half_lenght = (actuall_lenght - 1) / 2;
        //let half_lenght_u16: u16 = half_lenght as u16;
    
-       let actuall_lenght = splited_input.len();
-       let half_lenght = (actuall_lenght - 1) / 2;
-       let half_lenght_u16: u16 = half_lenght as u16;
+       let actuall_lenght = splited_input.len();		// Gets actual word lenght
+       let half_lenght = (actuall_lenght - 1) / 2;		// Calculates half word lengh
+       let half_lenght_u16: u16 = half_lenght as u16;		// Converts value to u16
    
 
        println!("{goto_1}{underline}{input_0}{reset_style}{goto_2}{red}^{reset_color}{goto_3}",
@@ -158,6 +168,8 @@ fn awaiting (x: usize, y: usize) { // Set's stand_by status
    reset_color = color::Fg(color::Reset),
    red = color::Fg(color::Red),
    goto_2 = cursor::Goto(x1, y1 + 1));
+   thread::sleep_ms(1500);
+
 
 }
 
@@ -175,7 +187,7 @@ fn clear_file(x: usize, y: usize) {
 
 // *************************************************************
 
-fn stand_by(x: usize, y: usize) {
+fn stand_by(x: usize, y: usize,) {
    let x1: u16 = x as u16;
    let y1: u16 = y as u16;
    
@@ -189,7 +201,7 @@ fn stand_by(x: usize, y: usize) {
    goto_2 = cursor::Goto(x1, y1 * 2),
    input_0 = "   ");
    debug_println!("**debug: stand_by fn");
-
+   
    thread::sleep_ms(750);
    println!("{clear}",
    clear = clear::All);
@@ -204,6 +216,7 @@ fn stand_by(x: usize, y: usize) {
    goto_3 = cursor::Goto(x1, y1 * 2),
    input_0 = "   ");
    debug_println!("**debug: stand_by fn");
+   
    thread::sleep_ms(750);
    looper();     
 }
